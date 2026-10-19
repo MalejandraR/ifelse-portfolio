@@ -8,7 +8,7 @@ import { defineConfig } from 'astro/config';
 // If the repo is ever renamed or the site moves to <user>.github.io,
 // update BOTH values (see README → Despliegue).
 export default defineConfig({
-  site: 'https://malejandrarr.github.io',
+  site: 'https://malejandrar.github.io',
   base: '/ifelse-portfolio',
   output: 'static',
 });
