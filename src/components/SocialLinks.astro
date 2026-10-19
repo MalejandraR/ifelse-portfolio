@@ -1,20 +1,24 @@
 ---
 /**
- * SocialLinks — renders GitHub / LinkedIn / email links, but ONLY when the
- * corresponding value in src/data/site.ts is a non-empty valid URL (spec §9).
+ * SocialLinks — renders the configured GitHub / LinkedIn / email links (plus
+ * the phone when the `phone` prop is set), but ONLY when the corresponding
+ * value in src/data/site.ts is a valid URL / email / phone (spec §9).
  * When nothing is configured the component renders nothing: no `href="#"`,
- * no fictitious URLs.
+ * no fictitious URLs. Phone is opt-in so navbar and footer stay icon-clean.
  */
-import { getSocials, type SocialKey } from '../data/site';
+import { getSocials, getPhone, type SocialKey } from '../data/site';
 
 interface Props {
   class?: string;
   /** Render icon + visible text label (Contact section) instead of icon-only. */
   labeled?: boolean;
+  /** Append the configured phone link (Contact section only). */
+  phone?: boolean;
 }
 
-const { class: className, labeled = false } = Astro.props;
+const { class: className, labeled = false, phone: withPhone = false } = Astro.props;
 const links = getSocials();
+const phoneLink = withPhone ? getPhone() : null;
 
 const icons: Record<SocialKey, { path: string; viewBox: string; fill: boolean }> = {
   github: {
@@ -32,16 +36,48 @@ const icons: Record<SocialKey, { path: string; viewBox: string; fill: boolean }>
     fill: false,
     path: 'M3 6.5h18a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1v-9a1 1 0 0 1 1-1Zm.6.9 8.4 5.9 8.4-5.9',
   },
+  // Phone glyph (Feather, MIT): same 24×24 stroke style as the mail icon.
+  phone: {
+    viewBox: '0 0 24 24',
+    fill: false,
+    path: 'M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z',
+  },
 };
+
+interface Entry {
+  key: SocialKey;
+  /** Accessible name (may be richer than the visible label). */
+  label: string;
+  href: string;
+  rel?: string;
+  /** Visible text override (phone shows grouped digits). */
+  text?: string;
+}
+
+const entries: Entry[] = links.map((link) => ({
+  key: link.key,
+  label: link.label,
+  href: link.href,
+  rel: link.key === 'email' ? undefined : 'noopener noreferrer',
+}));
+
+if (phoneLink) {
+  entries.push({
+    key: 'phone',
+    label: `Teléfono ${phoneLink.text}`,
+    href: phoneLink.href,
+    text: phoneLink.text,
+  });
+}
 ---
 
 {
-  links.length > 0 && (
+  entries.length > 0 && (
     <div class:list={['socials', labeled && 'socials--labeled', className]}>
-      {links.map((link) => {
-        const icon = icons[link.key];
+      {entries.map((entry) => {
+        const icon = icons[entry.key];
         return (
-          <a href={link.href} aria-label={link.label} rel={link.key === 'email' ? undefined : 'noopener noreferrer'}>
+          <a href={entry.href} aria-label={entry.label} rel={entry.rel}>
             <svg
               viewBox={icon.viewBox}
               fill={icon.fill ? 'currentColor' : 'none'}
@@ -53,7 +89,7 @@ const icons: Record<SocialKey, { path: string; viewBox: string; fill: boolean }>
             >
               <path d={icon.path} />
             </svg>
-            {labeled && <span>{link.label}</span>}
+            {labeled && <span>{entry.text ?? entry.label}</span>}
           </a>
         );
       })}

@@ -396,6 +396,29 @@ ul {
   text-transform: uppercase;
 }
 
+/* Monospace academic subtitle: sits under the eyebrow, above the H1.
+   Two block spans so each line wraps on its own at 320px (no nowrap,
+   no fixed width ⇒ no horizontal overflow). */
+.hero-subtitle {
+  margin-bottom: 1rem;
+  font-size: 0.95rem;
+  line-height: 1.45;
+}
+
+.hero-subtitle span {
+  display: block;
+}
+
+.hero-subtitle-primary {
+  color: var(--color-text);
+}
+
+.hero-subtitle-secondary {
+  color: var(--color-muted);
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+}
+
 .hero-title {
   /* Sized so both desktop lines fit the 45fr column without extra wrapping:
      20 chars × ~0.6em advance ≤ ~484px ⇒ cap 2.4rem (38.4px). */
@@ -606,12 +629,32 @@ ul {
 
 /* ---------- Sobre mí (spec §6.4) ---------- */
 
+/* Lead: emphatic opener — larger than body, full-strength text, generous
+   bottom margin so it clearly separates from the paragraphs below. */
+.about-lead {
+  max-width: 68ch;
+  margin-top: 1.6rem;
+  margin-bottom: 1.5rem;
+  color: var(--color-text);
+  font-size: clamp(1.1rem, 2.4vw, 1.3rem);
+  line-height: 1.7;
+}
+
+/* Body paragraphs: muted color, readable measure, steady vertical rhythm.
+   The lead's bottom margin collapses with the first paragraph's top margin,
+   so the opener keeps its extra breathing room. */
 .about-text {
   max-width: 70ch;
-  margin-top: 1.6rem;
+  margin-top: 1.15rem;
   color: var(--color-muted);
   font-size: 1.0625rem;
   line-height: 1.75;
+}
+
+/* Bold runs must stay legible on the dark background. */
+.about-text strong {
+  color: var(--color-text);
+  font-weight: 600;
 }
 
 /* ---------- Contacto (spec §6.5) ---------- */

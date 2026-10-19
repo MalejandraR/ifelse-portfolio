@@ -1,13 +1,41 @@
 ---
 /**
- * About — "Sobre mí" section, copy verbatim from spec §6.4.
+ * About — "Sobre mí" section: an emphatic lead followed by the body
+ * paragraphs from src/data/site.ts (spec §6.4).
+ *
+ * `**bold**` runs are split into alternating plain/bold segments and rendered
+ * as real <strong> elements — no markdown library and no `set:html`.
  */
 import { site } from '../data/site';
+
+interface Segment {
+  text: string;
+  bold: boolean;
+}
+
+/** Splits `**text**` runs into alternating plain and bold segments. */
+function splitBold(text: string): Segment[] {
+  return text
+    .split(/(\*\*[^*]+\*\*)/g)
+    .filter((segment) => segment.length > 0)
+    .map((segment) =>
+      segment.length > 4 && segment.startsWith('**') && segment.endsWith('**')
+        ? { text: segment.slice(2, -2), bold: true }
+        : { text: segment, bold: false },
+    );
+}
 ---
 
 <section class="section" id="sobre-mi" aria-labelledby="about-title">
   <div class="container">
     <h2 class="section-heading" id="about-title">Sobre mí</h2>
-    <p class="about-text">{site.about}</p>
+    <p class="about-lead">{site.about.lead}</p>
+    {
+      site.about.paragraphs.map((paragraph) => (
+        <p class="about-text">
+          {splitBold(paragraph).map((segment) => (segment.bold ? <strong>{segment.text}</strong> : segment.text))}
+        </p>
+      ))
+    }
   </div>
 </section>
