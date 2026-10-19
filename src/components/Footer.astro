@@ -1,0 +1,29 @@
+---
+/**
+ * Footer — brand, tagline divider (spec §3.6 / §6.6), build-time year and
+ * conditional social links.
+ */
+import Logo from './Logo.astro';
+import SocialLinks from './SocialLinks.astro';
+import { site } from '../data/site';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="container">
+    <p class="tagline-divider">{site.tagline}</p>
+
+    <div class="footer-bottom">
+      <a class="footer-brand" href="#inicio" aria-label={`${site.brand} — ir al inicio`}>
+        <Logo size={22} decorative />
+        <span>{site.brand}</span>
+      </a>
+
+      <div class="footer-meta">
+        <span>© {year} {site.displayName}</span>
+        <SocialLinks />
+      </div>
+    </div>
+  </div>
+</footer>

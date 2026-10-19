@@ -1,0 +1,104 @@
+---
+/**
+ * BranchingVisual — decorative `if` / `else` decision graph for the hero
+ * (spec §6.2). Pure inline SVG: crisp, responsive, no external images.
+ * Marked aria-hidden because it is decorative and never the only carrier
+ * of information.
+ */
+---
+
+<svg
+  class="branching-visual"
+  viewBox="0 0 480 230"
+  role="presentation"
+  aria-hidden="true"
+  focusable="false"
+>
+  <!-- Decision graph: root node splitting into two branches (the logo, larger) -->
+  <line class="graph-line" x1="56.7" y1="103.3" x2="98.3" y2="61.7"></line>
+  <line class="graph-line" x1="56.7" y1="126.7" x2="98.3" y2="168.3"></line>
+  <circle class="graph-node" cx="45" cy="115" r="14"></circle>
+  <circle class="graph-node" cx="110" cy="50" r="14"></circle>
+  <circle class="graph-node" cx="110" cy="180" r="14"></circle>
+
+  <!-- `if` branch -->
+  <rect class="chip-box" x="160" y="31" width="56" height="38" rx="9"></rect>
+  <text class="chip-text" x="188" y="56">if</text>
+  <line class="connector" x1="216" y1="50" x2="252" y2="50"></line>
+
+  <!-- `if` result cards -->
+  <rect class="card-box card-box--active" x="252" y="30" width="180" height="40" rx="8"></rect>
+  <text class="card-text card-text--active" x="342" y="56">{'{ crear }'}</text>
+
+  <rect class="card-box" x="252" y="84" width="180" height="40" rx="8"></rect>
+  <text class="card-text" x="342" y="110">{'{ mejorar }'}</text>
+
+  <!-- `else` branch -->
+  <rect class="chip-box" x="160" y="161" width="56" height="38" rx="9"></rect>
+  <text class="chip-text" x="188" y="186">else</text>
+  <line class="connector" x1="216" y1="180" x2="252" y2="180"></line>
+
+  <rect class="card-box" x="252" y="160" width="180" height="40" rx="8"></rect>
+  <text class="card-text" x="342" y="186">{'{ aprender }'}</text>
+</svg>
+
+<style>
+  .branching-visual {
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+
+  .graph-line {
+    stroke: var(--color-accent);
+    stroke-width: 5;
+    stroke-linecap: round;
+  }
+
+  .graph-node {
+    fill: var(--color-bg);
+    stroke: var(--color-accent);
+    stroke-width: 5;
+  }
+
+  .chip-box {
+    fill: var(--color-surface);
+    stroke: var(--color-border);
+    stroke-width: 1.5;
+  }
+
+  .card-box {
+    fill: var(--color-surface);
+    stroke: var(--color-border);
+    stroke-width: 1.5;
+  }
+
+  .card-box--active {
+    stroke: var(--color-accent);
+  }
+
+  .connector {
+    stroke: var(--color-muted);
+    stroke-opacity: 0.4;
+    stroke-width: 2;
+  }
+
+  .branching-visual text {
+    font-family: var(--font-mono);
+    text-anchor: middle;
+  }
+
+  .chip-text {
+    fill: var(--color-text);
+    font-size: 18px;
+  }
+
+  .card-text {
+    fill: var(--color-muted);
+    font-size: 16px;
+  }
+
+  .card-text--active {
+    fill: var(--color-accent);
+  }
+</style>

@@ -1,0 +1,42 @@
+---
+/**
+ * BaseLayout — HTML shell, SEO metadata and global styles (spec §13).
+ * `lang="es"`, Spanish meta description, SVG favicon, Open Graph basics.
+ */
+import '../styles/global.css';
+import { site } from '../data/site';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { title = site.title, description = site.description } = Astro.props;
+// BASE_URL has no trailing slash when `base` is set (e.g. "/ifelse-portfolio"),
+// so joining directly would produce "/ifelse-portfoliofavicon.svg".
+const base = import.meta.env.BASE_URL.replace(/\/+$/, '');
+const faviconUrl = `${base}/favicon.svg`;
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href={faviconUrl} />
+
+    <!-- Open Graph basics (spec §13). No og:image: no cover image exists yet. -->
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="es_ES" />
+    <meta property="og:site_name" content={site.brand} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta name="twitter:card" content="summary" />
+  </head>
+  <body>
+    <a class="skip-link" href="#contenido">Saltar al contenido</a>
+    <slot />
+  </body>
+</html>

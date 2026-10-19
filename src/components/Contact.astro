@@ -1,0 +1,18 @@
+---
+/**
+ * Contact — invitation line plus the conditional GitHub / LinkedIn / mailto
+ * links (spec §6.5). No form: there is no backend or form service in the MVP,
+ * and no fictitious links are ever rendered.
+ */
+import SocialLinks from './SocialLinks.astro';
+import { site } from '../data/site';
+---
+
+<section class="section" id="contacto" aria-labelledby="contact-title">
+  <div class="container">
+    <h2 class="section-heading" id="contact-title">Contacto</h2>
+    <p class="contact-invitation">{site.contactInvitation}</p>
+    <!-- Links render only when configured in src/data/site.ts (spec §9). -->
+    <SocialLinks class="contact-links" labeled />
+  </div>
+</section>

@@ -1,0 +1,48 @@
+---
+/**
+ * Logo — the branching decision-graph mark (own SVG, spec §2).
+ * Same geometry as public/favicon.svg so the brand stays consistent.
+ */
+interface Props {
+  /** Rendered pixel size of the square mark. */
+  size?: number;
+  /** Set to false when a visible text label sits next to the mark. */
+  decorative?: boolean;
+}
+
+const { size = 26, decorative = true } = Astro.props;
+---
+
+<svg
+  class="logo-mark"
+  width={size}
+  height={size}
+  viewBox="0 0 32 32"
+  fill="none"
+  role={decorative ? 'presentation' : 'img'}
+  aria-hidden={decorative ? 'true' : undefined}
+  aria-label={decorative ? undefined : 'ifelse'}
+>
+  {
+    !decorative && (
+      <title>ifelse</title>
+    )
+  }
+  <!-- Root node branching into two paths (Y split) -->
+  <g stroke="currentColor" stroke-width="2.6" stroke-linecap="round">
+    <path d="M11.7 13.5 18.3 10"></path>
+    <path d="M11.7 18.5 18.3 22"></path>
+  </g>
+  <g stroke="currentColor" stroke-width="2.6">
+    <circle cx="7" cy="16" r="4"></circle>
+    <circle cx="23" cy="7.5" r="4"></circle>
+    <circle cx="23" cy="24.5" r="4"></circle>
+  </g>
+</svg>
+
+<style>
+  .logo-mark {
+    color: var(--color-accent);
+    flex: none;
+  }
+</style>

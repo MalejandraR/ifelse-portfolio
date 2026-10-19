@@ -1,0 +1,38 @@
+---
+/**
+ * index — single-page composition (spec §5, §8).
+ * Section ids: inicio, proyectos, sobre-mi, contacto (spec §9).
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Navbar from '../components/Navbar.astro';
+import Hero from '../components/Hero.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import About from '../components/About.astro';
+import Contact from '../components/Contact.astro';
+import Footer from '../components/Footer.astro';
+import { projects, site } from '../data/site';
+---
+
+<BaseLayout>
+  <Navbar />
+
+  <main id="contenido">
+    <Hero />
+
+    <section class="section" id="proyectos" aria-labelledby="projects-title">
+      <div class="container">
+        <h2 class="section-heading" id="projects-title">Proyectos destacados</h2>
+        <p class="section-kicker">IDEAS QUE SE CONVIERTEN EN SOLUCIONES REALES</p>
+
+        <div class="projects-grid">
+          {projects.map((project) => <ProjectCard project={project} />)}
+        </div>
+      </div>
+    </section>
+
+    <About />
+    <Contact />
+  </main>
+
+  <Footer />
+</BaseLayout>

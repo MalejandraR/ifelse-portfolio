@@ -1,0 +1,63 @@
+---
+/**
+ * ProjectCard — one project from src/data/site.ts (spec §6.3).
+ * Shows a link ONLY when a real `repoUrl` is configured; otherwise the
+ * honest status chip is the single footer element. Never `href="#"`.
+ */
+import type { Project } from '../data/site';
+
+interface Props {
+  project: Project;
+}
+
+const { project } = Astro.props;
+
+const statusClass =
+  project.status === 'En desarrollo'
+    ? 'status-chip status-chip--dev'
+    : project.status === 'Completado'
+      ? 'status-chip status-chip--done'
+      : 'status-chip';
+
+/** Has a real, non-empty repository URL? */
+const hasLink = typeof project.repoUrl === 'string' && project.repoUrl.trim() !== '';
+
+const icons = {
+  bug: '<path d="M9 6V5a3 3 0 0 1 6 0v1"/><rect x="7" y="8" width="10" height="10" rx="5"/><path d="M7 12H3M21 12h-4M7.5 16.5 4.5 19M16.5 16.5l3 2.5M7.5 9.5 4.5 7M16.5 9.5 19.5 7M12 18v3"/>',
+  flask: '<path d="M10 3h4M11 3v6.5L5.6 18A2 2 0 0 0 7.3 21h9.4a2 2 0 0 0 1.7-3L13 9.5V3"/><path d="M8.5 15h7"/>',
+  graph: '<circle cx="6" cy="18" r="2.5"/><circle cx="18" cy="6" r="2.5"/><circle cx="18" cy="18" r="2.5"/><path d="M8.2 16.8 15.8 8.2M8.5 18h7"/>',
+} as const;
+
+const iconBody = icons[project.icon];
+---
+
+<article class="project-card">
+  <div class="card-head">
+    <span class="card-icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <Fragment set:html={iconBody} />
+      </svg>
+    </span>
+    <div>
+      <h3 class="card-title">{project.name}</h3>
+      <p class="card-category">{project.category}</p>
+    </div>
+  </div>
+
+  <p class="card-description">{project.description}</p>
+
+  <ul class="tech-list" aria-label={`Tecnologías de ${project.name}`}>
+    {project.stack.map((tech) => <li>{tech}</li>)}
+  </ul>
+
+  <div class="card-footer">
+    <span class={statusClass}>{project.status}</span>
+    {
+      hasLink && (
+        <a class="card-link" href={project.repoUrl as string} rel="noopener noreferrer">
+          Ver proyecto <span aria-hidden="true">→</span>
+        </a>
+      )
+    }
+  </div>
+</article>
