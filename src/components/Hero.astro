@@ -1,7 +1,7 @@
 ---
 /**
- * Hero — eyebrow, monospace subtitle, H1 with lime highlight, description and
- * two CTAs on the left; decorative branching visual on the right (spec §6.2).
+ * Hero — eyebrow, H1 with lime highlight, description and two CTAs on the
+ * left; decorative branching visual on the right (spec §6.2).
  */
 import BranchingVisual from './BranchingVisual.astro';
 import { site } from '../data/site';
@@ -12,10 +12,6 @@ import { site } from '../data/site';
     <div class="hero-grid">
       <div class="hero-copy">
         <p class="eyebrow">{site.eyebrow}</p>
-        <p class="hero-subtitle">
-          <span class="hero-subtitle-primary">{site.subtitle.line1}</span>
-          <span class="hero-subtitle-secondary">{site.subtitle.line2}</span>
-        </p>
         <h1 class="hero-title" id="hero-title">{site.headline.line1}<br class="hero-break" />{site.headline.line2}<span class="accent">{site.headline.highlight}</span></h1>
         <p class="hero-description">{site.heroDescription}</p>
         <div class="hero-actions">

@@ -396,29 +396,6 @@ ul {
   text-transform: uppercase;
 }
 
-/* Monospace academic subtitle: sits under the eyebrow, above the H1.
-   Two block spans so each line wraps on its own at 320px (no nowrap,
-   no fixed width ⇒ no horizontal overflow). */
-.hero-subtitle {
-  margin-bottom: 1rem;
-  font-size: 0.95rem;
-  line-height: 1.45;
-}
-
-.hero-subtitle span {
-  display: block;
-}
-
-.hero-subtitle-primary {
-  color: var(--color-text);
-}
-
-.hero-subtitle-secondary {
-  color: var(--color-muted);
-  font-size: 0.85rem;
-  letter-spacing: 0.04em;
-}
-
 .hero-title {
   /* Sized so both desktop lines fit the 45fr column without extra wrapping:
      20 chars × ~0.6em advance ≤ ~484px ⇒ cap 2.4rem (38.4px). */

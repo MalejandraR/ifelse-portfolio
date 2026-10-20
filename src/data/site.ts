@@ -42,11 +42,6 @@ export const site = {
   tagline: 'BUILD / TEST / IMPROVE',
   /** Hero eyebrow (spec §6.2). */
   eyebrow: 'HOLA, SOY ALEJA 👋',
-  /** Monospace subtitle rendered between the eyebrow and the headline. */
-  subtitle: {
-    line1: 'Ingeniería de Sistemas',
-    line2: 'Universidad de Antioquia · 6.º semestre',
-  },
   /** Hero headline (spec §6.2); `highlight` renders in lime. */
   headline: {
     line1: 'Código, pruebas ',
@@ -57,17 +52,24 @@ export const site = {
   heroDescription:
     'Desarrollo software y aseguro su calidad a través de pruebas automatizadas. Me apasiona crear soluciones funcionales, eficientes y con propósito.',
   /**
-   * Sobre mí copy (spec §6.4): emphatic lead followed by ordered paragraphs.
-   * `**text**` runs are turned into <strong> by About.astro (no markdown lib).
+   * Sobre mí copy (spec §6.4): emphatic lead, short first-person paragraphs
+   * and a highlighted pull-quote. `**text**` runs are turned into <strong>
+   * by About.astro (no markdown lib).
    */
   about: {
-    lead: 'Me gusta entender cómo funcionan las cosas, descubrir cómo pueden mejorar y construir soluciones que realmente aporten valor.',
+    lead: 'Construyo software y compruebo que funcione.',
     paragraphs: [
-      'Soy estudiante de **sexto semestre de Ingeniería de Sistemas en la Universidad de Antioquia (UdeA)** y me interesa la tecnología como una forma de resolver problemas, transformar ideas y crear soluciones útiles.',
-      'Mi camino en tecnología combina dos perspectivas que considero fundamentales en la ingeniería de software: **desarrollar soluciones y asegurar su calidad**. Mi experiencia en QA me ha enseñado a cuestionar supuestos, explorar distintos escenarios y prestar atención a los detalles que pueden marcar la diferencia entre un software que simplemente funciona y uno en el que las personas pueden confiar.',
-      'He explorado distintas áreas del desarrollo, desde aplicaciones web y servicios backend hasta automatización de pruebas y tecnologías cloud. Trabajo con herramientas como JavaScript, React, Node.js, Spring Boot, Cypress, Selenium, SQL y Microsoft Azure, mientras continúo ampliando mis conocimientos en programación y buenas prácticas de ingeniería.',
-      'Disfruto aprender, experimentar y enfrentar desafíos que me permitan conectar la lógica, la creatividad y la resolución de problemas. A través de mis proyectos personales, busco llevar las ideas desde su concepción hasta su implementación, probarlas en distintos escenarios y encontrar oportunidades para mejorarlas.',
-      '**Creo que desarrollar software no consiste únicamente en hacer que algo funcione, sino en entender por qué funciona, comprobar que siga haciéndolo y encontrar formas de hacerlo mejor.** Esa es la mentalidad que quiero aportar a cada proyecto y a cada equipo del que forme parte.',
+      'Soy estudiante de sexto semestre de Ingeniería de Sistemas en la Universidad de Antioquia. Me muevo entre dos mundos: desarrollar soluciones y asegurar que sean confiables.',
+      'Mi experiencia en QA me enseñó a cuestionar supuestos y a buscar los escenarios donde algo puede fallar. Esa mentalidad la llevo a mis proyectos personales, donde construyo la aplicación y también sus pruebas automatizadas.',
+      'Busco una oportunidad laboral en desarrollo de software o QA, en un equipo donde pueda aportar y seguir creciendo.',
+    ],
+    quote:
+      'Desarrollar software no es solo hacer que algo funcione, sino entender por qué funciona, comprobar que siga haciéndolo y encontrar cómo mejorarlo.',
+    /** Technologies shown as chips under the About copy, grouped by area. */
+    techGroups: [
+      { label: 'Lenguajes y frameworks', items: ['JavaScript', 'React', 'Node.js', 'Spring Boot'] },
+      { label: 'Testing', items: ['Cypress', 'Selenium'] },
+      { label: 'Datos y cloud', items: ['SQL', 'Microsoft Azure'] },
     ],
   },
   /** Contacto invitation (spec §6.5). */
@@ -89,24 +91,17 @@ export const navLinks = [
 //       fictitious URLs.
 // ---------------------------------------------------------------------------
 
-/** TODO: real GitHub profile URL (scheme https). */
+/** Real GitHub profile URL (scheme https). */
 export const github = 'https://github.com/MalejandraR';
 
-/** TODO: real LinkedIn profile URL (scheme https); kept empty BY CHOICE for now. */
-export const linkedin = '';
+/** Real LinkedIn profile URL (scheme https). */
+export const linkedin = 'https://www.linkedin.com/in/maria-alejandrar/';
 
-/** TODO: real professional email; rendered as a mailto: link. */
+/** Real professional email; rendered as a mailto: link. */
 export const email = 'maria.ramirez6@udea.edu.co';
 
-/**
- * TODO / configurable: phone as RAW digits (no spaces, no `+57`, no `tel:`).
- * The scheme and country code are added by getPhone(); an empty or invalid
- * value renders no phone link at all.
- */
-export const phone = '3104381846';
-
-/** Keys understood by the SocialLinks icon set; `phone` is opt-in (Contacto). */
-export type SocialKey = 'github' | 'linkedin' | 'email' | 'phone';
+/** Keys understood by the SocialLinks icon set. */
+export type SocialKey = 'github' | 'linkedin' | 'email';
 
 export interface SocialLink {
   key: SocialKey;
@@ -128,17 +123,9 @@ function isEmail(value: string): boolean {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 }
 
-/** Digits only, 7–15 of them (E.164 maximum without the `+`). */
-function isPhone(value: string): boolean {
-  return /^\d{7,15}$/.test(value);
-}
-
 /**
  * Returns only the contact links whose configuration value is valid (spec §9).
  * Empty/invalid values are omitted entirely — never rendered as dead links.
- * Phone is intentionally NOT part of this list: it is exposed through
- * getPhone() and rendered only where a labeled phone link fits (Contacto),
- * so the navbar and footer stay clean.
  */
 export function getSocials(): SocialLink[] {
   const links: SocialLink[] = [];
@@ -154,37 +141,6 @@ export function getSocials(): SocialLink[] {
   }
 
   return links;
-}
-
-/** Dial prefix applied by the code — never stored in the config above. */
-const PHONE_COUNTRY_CODE = '+57';
-
-/** Groups digits for display: `3104381846` → `310 438 1846`. */
-function formatPhone(digits: string): string {
-  const parts: string[] = [];
-  let rest = digits;
-  while (rest.length > 4) {
-    parts.push(rest.slice(0, 3));
-    rest = rest.slice(3);
-  }
-  parts.push(rest);
-  return parts.join(' ');
-}
-
-export interface PhoneLink {
-  /** `tel:` URI including the country code added by the code. */
-  href: string;
-  /** Human-readable digits, e.g. `310 438 1846`. */
-  text: string;
-}
-
-/**
- * Returns the phone link when the configured value is valid, otherwise null
- * (spec §9: an empty/invalid phone renders no `tel:` link, never a dead one).
- */
-export function getPhone(): PhoneLink | null {
-  if (!isPhone(phone)) return null;
-  return { href: `tel:${PHONE_COUNTRY_CODE}${phone}`, text: formatPhone(phone) };
 }
 
 export const projects: Project[] = [

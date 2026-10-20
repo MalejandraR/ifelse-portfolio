@@ -1,7 +1,8 @@
 ---
 /**
- * About — "Sobre mí" section: an emphatic lead followed by the body
- * paragraphs from src/data/site.ts (spec §6.4).
+ * About — "Sobre mí" section: an emphatic lead, short body paragraphs, a
+ * highlighted pull-quote and the technology chips, all from src/data/site.ts
+ * (spec §6.4).
  *
  * `**bold**` runs are split into alternating plain/bold segments and rendered
  * as real <strong> elements — no markdown library and no `set:html`.
@@ -37,5 +38,80 @@ function splitBold(text: string): Segment[] {
         </p>
       ))
     }
+
+    <blockquote class="about-quote">
+      <p>{site.about.quote}</p>
+    </blockquote>
+
+    <div class="about-tech">
+      {
+        site.about.techGroups.map((group) => (
+          <div class="tech-group">
+            <h3 class="tech-group-label">{group.label}</h3>
+            <ul class="tech-chips">
+              {group.items.map((item) => (
+                <li class="tech-chip">{item}</li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
   </div>
 </section>
+
+<style>
+  /* Pull-quote: accent bar + surface tint, reusing the site tokens so it
+     matches the dark/lime theme without new colors. */
+  .about-quote {
+    max-width: 62ch;
+    margin: 2rem 0 0;
+    padding: 1rem 1.25rem;
+    border-left: 3px solid var(--color-accent);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    background-color: color-mix(in srgb, var(--color-accent) 6%, transparent);
+  }
+
+  .about-quote p {
+    margin: 0;
+    color: var(--color-text);
+    font-size: clamp(1rem, 2.2vw, 1.125rem);
+    line-height: 1.7;
+  }
+
+  /* Technology chips: one labeled group per category, chips wrap at ~360px
+     with no horizontal overflow and keep readable text size. */
+  .about-tech {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    margin-top: 2.25rem;
+  }
+
+  .tech-group-label {
+    margin: 0 0 0.6rem;
+    color: var(--color-muted);
+    font-size: 0.8rem;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .tech-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .tech-chip {
+    padding: 0.35rem 0.75rem;
+    color: var(--color-text);
+    font-size: 0.9rem;
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+  }
+</style>
